@@ -3,7 +3,6 @@ package io.github.itzispyder.clickcrystals.mixins;
 import io.github.itzispyder.clickcrystals.Global;
 import io.github.itzispyder.clickcrystals.modules.Module;
 import io.github.itzispyder.clickcrystals.modules.modules.rendering.CameraClip;
-import io.github.itzispyder.clickcrystals.modules.modules.rendering.FreeLook;
 import io.github.itzispyder.clickcrystals.modules.modules.rendering.NoOverlay;
 import net.minecraft.block.enums.CameraSubmersionType;
 import net.minecraft.client.render.Camera;
@@ -43,13 +42,5 @@ public abstract class MixinCamera implements Global {
             bypassCameraClip = true;
             cir.setReturnValue(clipToSpace(clip.clipDistance.getVal().floatValue()));
         }
-    }
-
-    @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Camera;setRotation(FF)V"))
-    private void redirectSetRotation(Camera camera, float yaw, float pitch) {
-        FreeLook freeLook = Module.get(FreeLook.class);
-        if (freeLook.isEnabled() && mc.options.getPerspective() == freeLook.PerspectivePoint.getVal().getPerspective())
-            return;
-        this.setRotation(yaw, pitch);
     }
 }
